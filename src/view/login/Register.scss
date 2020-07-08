@@ -1,0 +1,26 @@
+#register {
+  position: relative;
+  height: 100vh;
+  background: url("../../assets/images/login_bj.jpg") no-repeat;
+  background-size: cover;
+  .content-wrap {
+    position: absolute;
+    right: 100px;
+    top: 250px;
+    transform: translateX(-50%);
+    padding: 10px;
+    width: 300px;
+    background: #fff;
+    border-radius: 4px;
+    .tip {
+      height: 40px;
+      h4 {
+        font-weight: 700;
+      }
+      span{
+        cursor: pointer;
+        color: #666;
+      }
+    }
+  }
+}

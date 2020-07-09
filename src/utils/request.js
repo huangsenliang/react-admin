@@ -2,9 +2,11 @@ import axios from "axios";
 
 // 创建服务
 const service = axios.create({
-    baseURL: "",
+    baseURL: process.env.REACT_APP_API,
     timeout: 5000,
 });
+
+
 
 // 第二步：请求拦截
 service.interceptors.request.use(
@@ -18,7 +20,7 @@ service.interceptors.request.use(
     }
 );
 
-// 第三步：相应拦截
+// 第三步：响应拦截
 service.interceptors.response.use(
     function(response){
         return response

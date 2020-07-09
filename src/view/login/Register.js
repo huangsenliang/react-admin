@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Register.scss";
 
 /***********antd组件********/
-import { Form, Input, Button,Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined, InsuranceOutlined } from '@ant-design/icons';
 /**
  * 注册组件
@@ -12,13 +12,20 @@ class RegisterForm extends Component {
         super(props);
         this.state = {};
     };
+    /**
+     * 子组件给父组件传参
+     * */
+    toggleForm = () => {
+        this.props.switchForm("login");
+    };
+
     render() {
         return (
             <div id="register">
                 <div className="content-wrap">
                     <div className="tip flex justify-between align-items">
                         <h4>注册</h4>
-                        <span>账号登录</span>
+                        <span onClick={this.toggleForm}>账号登录</span>
                     </div>
                     <div className="form-wrap">
                         <Form

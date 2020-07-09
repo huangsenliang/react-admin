@@ -2,28 +2,61 @@ import React, { Component, Fragment } from "react";
 import "./Login.scss";
 
 /***********antd组件********/
-import { Form, Input, Button, Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col, message } from 'antd';
 import { UserOutlined, LockOutlined, InsuranceOutlined } from '@ant-design/icons';
 
 /**
  * 校验工具
- * */ 
-import {validate_password} from "../../utils/validate";
+ * */
+import { validate_password } from "../../utils/validate";
 
 /**
  * api
- * */ 
-import {Login} from "../../api/account"
+ * */
+import { Login, GetCode } from "../../api/account"
 /**
  * 登录组件
  * */
 class LoginForm extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            username:"",  // 用户名
+        };
     };
+    // 登录
     onFinish = values => {
+        Login(values).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        })
         console.log('Received values of form: ', values);
+    };
+    // 获取验证码
+    getCode = () => {
+        let username = this.state.username;
+        if(!username){
+            message.info('用户名不能为空！',1);
+            return false
+        }
+        let responseData = {
+            username,
+            module: 'register'
+        }
+        console.log(responseData);
+        GetCode(responseData).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        })
+    };
+    // inputChange输入处理
+    inputChange = (e)=>{
+        let value = e.target.value;
+        this.setState({
+            username:value
+        })
     };
     /**
      * 子组件给父组件传参
@@ -32,6 +65,7 @@ class LoginForm extends Component {
         this.props.switchForm("register");
     };
     render() {
+        const {username} = this.state;
         return (
             <Fragment>
                 <div id="login">
@@ -52,17 +86,17 @@ class LoginForm extends Component {
                                     name="username"
                                     rules={[
                                         { required: true, message: '用户名不能为空' },
-                                        {type:"email",message:"邮箱格式不正确"}
+                                        { type: "email", message: "邮箱格式不正确" }
                                     ]}
                                 >
-                                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="账号" />
+                                    <Input value={username} onChange={this.inputChange} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="账号" />
                                 </Form.Item>
                                 {/* 密码 */}
                                 <Form.Item
                                     name="password"
                                     rules={[
                                         { required: true, message: '密码不能为空' },
-                                        {pattern:validate_password,message:"请输入大于6小于20位的密码"}
+                                        { pattern: validate_password, message: "请输入大于6小于20位的密码" }
                                     ]}
                                 >
                                     <Input
@@ -77,7 +111,7 @@ class LoginForm extends Component {
                                     name="code"
                                     rules={[
                                         { required: true, message: '验证码不能为空' },
-                                        {len:6, message:"请输入长度为6的验证码"}
+                                        { len: 6, message: "请输入长度为6的验证码" }
                                     ]}
                                 >
                                     <Row gutter={8}>
@@ -89,7 +123,7 @@ class LoginForm extends Component {
                                             />
                                         </Col>
                                         <Col span={9}>
-                                            <Button type="danger" htmlType="submit" className="login-form-button">
+                                            <Button onClick={this.getCode} type="danger" className="login-form-button">
                                                 获取验证码</Button>
                                         </Col>
                                     </Row>
